@@ -610,27 +610,37 @@ export default function Index() {
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              setShowSuggestions(true);
+              setShowSuggestions(e.target.value.length > 0);
             }}
-            onFocus={() => setShowSuggestions(true)}
-            placeholder="Например, картошка..."
+            onFocus={() => setShowSuggestions(searchQuery.length > 0)}
+            placeholder="Начните вводить: карт..., морк..., лук..."
             className="pl-12 py-6 rounded-2xl border-0 bg-white/95 backdrop-blur-sm text-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-white/50"
           />
         </div>
 
-        {showSuggestions && searchQuery && filteredIngredients.length > 0 && (
-          <Card className="absolute left-6 right-6 mt-2 max-h-64 overflow-y-auto border-0 shadow-2xl rounded-2xl animate-scale-in">
+        {showSuggestions && searchQuery.length > 0 && filteredIngredients.length > 0 && (
+          <Card className="absolute left-6 right-6 mt-2 max-h-80 overflow-y-auto border-0 shadow-2xl rounded-2xl animate-scale-in z-50">
             {filteredIngredients.map((ingredient) => (
               <button
                 key={ingredient.name}
                 onClick={() => addIngredient(ingredient.name)}
-                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-orange-50 transition-colors border-b last:border-b-0"
+                className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gradient-to-r hover:from-orange-50 hover:to-pink-50 transition-all border-b last:border-b-0 first:rounded-t-2xl last:rounded-b-2xl"
               >
-                <span className="text-2xl">{ingredient.icon}</span>
-                <span className="text-gray-800 font-medium">{ingredient.name}</span>
-                <Icon name="Plus" size={18} className="ml-auto text-orange-500" />
+                <span className="text-3xl">{ingredient.icon}</span>
+                <div className="flex-1 text-left">
+                  <span className="text-gray-900 font-semibold text-lg">{ingredient.name}</span>
+                </div>
+                <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full p-2">
+                  <Icon name="Plus" size={20} />
+                </div>
               </button>
             ))}
+          </Card>
+        )}
+        
+        {showSuggestions && searchQuery.length > 0 && filteredIngredients.length === 0 && (
+          <Card className="absolute left-6 right-6 mt-2 border-0 shadow-2xl rounded-2xl animate-scale-in z-50 p-4 text-center">
+            <p className="text-gray-600">Продукт не найден. Попробуйте другое название.</p>
           </Card>
         )}
       </div>
@@ -638,9 +648,10 @@ export default function Index() {
       <div className="flex-1 px-6 pt-6">
         {selectedIngredients.length > 0 ? (
           <div className="animate-fade-in">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              Выбрано: {selectedIngredients.length}
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              Ваши продукты
             </h2>
+            <p className="text-sm text-gray-600 mb-4">Выбрано: {selectedIngredients.length}</p>
             <div className="flex flex-wrap gap-3">
               {selectedIngredients.map((ingredient) => {
                 const ingredientData = ALL_INGREDIENTS.find((i) => i.name === ingredient);
@@ -666,11 +677,16 @@ export default function Index() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in">
-            <div className="text-6xl mb-4">🥘</div>
-            <p className="text-gray-500 mb-2">Начните вводить название продукта</p>
-            <p className="text-sm text-gray-400 px-8">
-              Используйте поиск выше, чтобы добавить ингредиенты из холодильника
+            <div className="text-7xl mb-6">🍳🥕🥔</div>
+            <h3 className="text-xl font-bold text-gray-800 mb-3">Что есть в холодильнике?</h3>
+            <p className="text-gray-600 mb-2 px-8">
+              Введите первые буквы продукта в поиске выше
             </p>
+            <div className="flex gap-2 mt-4 text-sm">
+              <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-medium">карт...</span>
+              <span className="bg-pink-100 text-pink-700 px-3 py-1 rounded-full font-medium">морк...</span>
+              <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">лук...</span>
+            </div>
           </div>
         )}
       </div>
