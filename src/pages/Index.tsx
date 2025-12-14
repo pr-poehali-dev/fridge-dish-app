@@ -385,59 +385,95 @@ export default function Index() {
       </div>
 
       <div className="px-6 pt-4 space-y-4">
-        {filteredRecipes.map((recipe, index) => (
-          <Card
-            key={recipe.id}
-            className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] animate-slide-up rounded-3xl"
-            style={{ animationDelay: `${index * 100}ms` }}
-          >
-            <div className="flex gap-4 p-4">
-              <div className="relative flex-shrink-0">
-                <img
-                  src={recipe.image}
-                  alt={recipe.title}
-                  className="w-24 h-24 object-cover rounded-2xl"
-                />
-                <button
-                  onClick={() => toggleFavorite(recipe.id)}
-                  className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md hover:scale-110 transition-transform"
-                >
-                  <Icon
-                    name="Heart"
-                    size={16}
-                    className={cn(
-                      'transition-colors',
-                      favorites.includes(recipe.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'
+        {filteredRecipes.map((recipe, index) => {
+          const availableIngredients = recipe.ingredients.filter((ing) =>
+            selectedIngredients.includes(ing)
+          );
+          const missingIngredients = recipe.ingredients.filter((ing) =>
+            !selectedIngredients.includes(ing)
+          );
+          const hasCount = availableIngredients.length;
+          const needCount = missingIngredients.length;
+
+          return (
+            <Card
+              key={recipe.id}
+              className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 animate-slide-up rounded-3xl"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
+              <div className="p-4">
+                <div className="flex gap-4 mb-3">
+                  <div className="relative flex-shrink-0">
+                    <img
+                      src={recipe.image}
+                      alt={recipe.title}
+                      className="w-20 h-20 object-cover rounded-xl"
+                    />
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-gray-900 mb-2 text-base">{recipe.title}</h3>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-1 text-xs text-gray-600">
+                        <Icon name="ChefHat" size={14} className="text-orange-500" />
+                        <span className="font-medium">{recipe.difficulty}</span>
+                      </div>
+                      <div className="w-1 h-1 rounded-full bg-gray-300"></div>
+                      <div className="flex items-center gap-1 text-xs text-gray-600">
+                        <Icon name="Clock" size={14} className="text-orange-500" />
+                        <span>{recipe.time}</span>
+                      </div>
+                    </div>
+                    
+                    {selectedIngredients.length > 0 && (
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                          <span className="text-xs font-semibold text-gray-700">
+                            {hasCount} есть
+                          </span>
+                        </div>
+                        {needCount > 0 && (
+                          <>
+                            <span className="text-gray-400">+</span>
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                              <span className="text-xs font-semibold text-gray-700">
+                                {needCount} нужно
+                              </span>
+                            </div>
+                          </>
+                        )}
+                      </div>
                     )}
-                  />
-                </button>
-              </div>
-              
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-800 mb-1 truncate">{recipe.title}</h3>
-                <div className="flex gap-3 text-xs text-gray-600 mb-2">
-                  <span className="flex items-center gap-1">
-                    <Icon name="Clock" size={14} />
-                    {recipe.time}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Icon name="ChefHat" size={14} />
-                    {recipe.difficulty}
-                  </span>
+                  </div>
+
+                  <button
+                    onClick={() => toggleFavorite(recipe.id)}
+                    className="flex-shrink-0 self-start p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <Icon
+                      name="Heart"
+                      size={20}
+                      className={cn(
+                        'transition-colors',
+                        favorites.includes(recipe.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'
+                      )}
+                    />
+                  </button>
                 </div>
+
                 <Button
+                  className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold rounded-xl"
                   size="sm"
-                  variant="outline"
-                  className="w-full rounded-xl text-xs border-orange-300 text-orange-600 hover:bg-orange-50"
-                  onClick={() => addToShoppingList(recipe.ingredients)}
                 >
-                  <Icon name="ShoppingCart" size={14} className="mr-1" />
-                  В список покупок
+                  Посмотреть рецепт
+                  <Icon name="ArrowRight" size={16} className="ml-2" />
                 </Button>
               </div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
