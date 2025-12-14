@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
+import recipesData from '@/data/recipes-raw.json';
 
 type TabType = 'home' | 'search' | 'favorites' | 'categories' | 'ingredients' | 'recipe';
 
@@ -47,181 +48,11 @@ const ALL_INGREDIENTS = [
 
 const POPULAR_INGREDIENTS = ALL_INGREDIENTS.slice(0, 10);
 
-const SAMPLE_RECIPES = [
-  {
-    id: 1,
-    title: 'Куриный суп с лапшой',
-    time: '45 мин',
-    difficulty: 'Легко',
-    category: 'Первые блюда',
-    calories: 280,
-    ingredients: ['Курица', 'Лук', 'Морковь', 'Лапша'],
-    ingredientsDetailed: [
-      { name: 'Курица', amount: '300 г' },
-      { name: 'Лук', amount: '1 шт' },
-      { name: 'Морковь', amount: '2 шт' },
-      { name: 'Лапша', amount: '100 г' },
-      { name: 'Соль', amount: 'по вкусу' },
-    ],
-    instructions: [
-      'Отварите курицу в 2 литрах воды в течение 30 минут',
-      'Нарежьте лук и морковь небольшими кубиками',
-      'Добавьте овощи в бульон и варите 10 минут',
-      'Добавьте лапшу и варите ещё 5 минут',
-      'Посолите по вкусу и подавайте горячим',
-    ],
-    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400',
-  },
-  {
-    id: 2,
-    title: 'Паста Карбонара',
-    time: '25 мин',
-    difficulty: 'Средне',
-    category: 'Вторые блюда',
-    calories: 520,
-    ingredients: ['Макароны', 'Яйца', 'Сыр', 'Бекон'],
-    ingredientsDetailed: [
-      { name: 'Макароны', amount: '200 г' },
-      { name: 'Яйца', amount: '3 шт' },
-      { name: 'Сыр Пармезан', amount: '100 г' },
-      { name: 'Бекон', amount: '150 г' },
-      { name: 'Чёрный перец', amount: 'по вкусу' },
-    ],
-    instructions: [
-      'Отварите макароны в подсоленной воде до готовности',
-      'Обжарьте бекон на сковороде до золотистой корочки',
-      'Взбейте яйца с тёртым сыром в миске',
-      'Смешайте горячие макароны с яйцами и беконом',
-      'Поперчите и подавайте немедленно',
-    ],
-    image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400',
-  },
-  {
-    id: 3,
-    title: 'Греческий салат',
-    time: '15 мин',
-    difficulty: 'Легко',
-    category: 'Салаты',
-    ingredients: ['Помидоры', 'Огурцы', 'Сыр Фета', 'Оливки'],
-    image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400',
-  },
-  {
-    id: 4,
-    title: 'Жареная курица с картошкой',
-    time: '60 мин',
-    difficulty: 'Средне',
-    category: 'Вторые блюда',
-    ingredients: ['Курица', 'Картофель', 'Чеснок', 'Масло'],
-    image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400',
-  },
-  {
-    id: 5,
-    title: 'Омлет с помидорами',
-    time: '15 мин',
-    difficulty: 'Легко',
-    category: 'Завтраки',
-    ingredients: ['Яйца', 'Помидоры', 'Сыр', 'Молоко'],
-    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400',
-  },
-  {
-    id: 6,
-    title: 'Грибной крем-суп',
-    time: '35 мин',
-    difficulty: 'Средне',
-    category: 'Первые блюда',
-    ingredients: ['Грибы', 'Лук', 'Молоко', 'Масло'],
-    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400',
-  },
-  {
-    id: 7,
-    title: 'Бутерброд с сыром и помидором',
-    time: '5 мин',
-    difficulty: 'Легко',
-    category: 'Бутерброды',
-    ingredients: ['Хлеб', 'Сыр', 'Помидоры', 'Масло'],
-    image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400',
-  },
-  {
-    id: 8,
-    title: 'Овощное рагу',
-    time: '40 мин',
-    difficulty: 'Легко',
-    category: 'Вторые блюда',
-    ingredients: ['Картофель', 'Морковь', 'Лук', 'Помидоры'],
-    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400',
-  },
-  {
-    id: 9,
-    title: 'Яичница с беконом',
-    time: '10 мин',
-    difficulty: 'Легко',
-    category: 'Завтраки',
-    ingredients: ['Яйца', 'Бекон', 'Масло'],
-    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400',
-  },
-  {
-    id: 10,
-    title: 'Цезарь с курицей',
-    time: '20 мин',
-    difficulty: 'Средне',
-    category: 'Салаты',
-    ingredients: ['Курица', 'Салат', 'Сыр', 'Хлеб'],
-    image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400',
-  },
-  {
-    id: 11,
-    title: 'Куриный бульон',
-    time: '90 мин',
-    difficulty: 'Легко',
-    category: 'Первые блюда',
-    ingredients: ['Курица', 'Лук', 'Морковь', 'Соль'],
-    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400',
-  },
-  {
-    id: 12,
-    title: 'Картофельное пюре',
-    time: '30 мин',
-    difficulty: 'Легко',
-    category: 'Вторые блюда',
-    ingredients: ['Картофель', 'Молоко', 'Масло', 'Соль'],
-    image: 'https://images.unsplash.com/photo-1587080266227-677cc2a4e76e?w=400',
-  },
-  {
-    id: 13,
-    title: 'Тост с авокадо и яйцом',
-    time: '10 мин',
-    difficulty: 'Легко',
-    category: 'Завтраки',
-    ingredients: ['Хлеб', 'Яйца', 'Авокадо'],
-    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400',
-  },
-  {
-    id: 14,
-    title: 'Клаб-сэндвич',
-    time: '15 мин',
-    difficulty: 'Средне',
-    category: 'Бутерброды',
-    ingredients: ['Хлеб', 'Курица', 'Помидоры', 'Салат'],
-    image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400',
-  },
-  {
-    id: 15,
-    title: 'Винегрет',
-    time: '25 мин',
-    difficulty: 'Легко',
-    category: 'Салаты',
-    ingredients: ['Свекла', 'Картофель', 'Морковь', 'Огурцы'],
-    image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400',
-  },
-];
+const SAMPLE_RECIPES = recipesData.recipes;
 
 const RECIPE_CATEGORIES = [
   'Все блюда',
-  'Вторые блюда',
-  'Первые блюда',
-  'Завтраки',
   'Салаты',
-  'Бутерброды',
 ];
 
 const CATEGORIES = [
