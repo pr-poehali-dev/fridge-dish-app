@@ -613,9 +613,25 @@ export default function Index() {
               setShowSuggestions(e.target.value.length > 0);
             }}
             onFocus={() => setShowSuggestions(searchQuery.length > 0)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && searchQuery.trim()) {
+                addIngredient(searchQuery.trim());
+                e.preventDefault();
+              }
+            }}
             placeholder="Начните вводить: карт..., морк..., лук..."
-            className="pl-12 py-6 rounded-2xl border-0 bg-white/95 backdrop-blur-sm text-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-white/50"
+            className="pl-12 py-6 pr-12 rounded-2xl border-0 bg-white/95 backdrop-blur-sm text-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-white/50"
           />
+          {searchQuery.trim() && (
+            <button
+              onClick={() => {
+                addIngredient(searchQuery.trim());
+              }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white text-orange-500 hover:bg-orange-50 rounded-full p-2 transition-colors shadow-md"
+            >
+              <Icon name="Plus" size={20} />
+            </button>
+          )}
         </div>
 
         {showSuggestions && searchQuery.length > 0 && filteredIngredients.length > 0 && (
@@ -639,8 +655,20 @@ export default function Index() {
         )}
         
         {showSuggestions && searchQuery.length > 0 && filteredIngredients.length === 0 && (
-          <Card className="absolute left-6 right-6 mt-2 border-0 shadow-2xl rounded-2xl animate-scale-in z-50 p-4 text-center">
-            <p className="text-gray-600">Продукт не найден. Попробуйте другое название.</p>
+          <Card className="absolute left-6 right-6 mt-2 border-0 shadow-2xl rounded-2xl animate-scale-in z-50">
+            <button
+              onClick={() => addIngredient(searchQuery.trim())}
+              className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gradient-to-r hover:from-orange-50 hover:to-pink-50 transition-all rounded-2xl"
+            >
+              <span className="text-3xl">➕</span>
+              <div className="flex-1 text-left">
+                <span className="text-gray-900 font-semibold text-lg">Добавить "{searchQuery}"</span>
+                <p className="text-sm text-gray-500">Ваш продукт</p>
+              </div>
+              <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full p-2">
+                <Icon name="Plus" size={20} />
+              </div>
+            </button>
           </Card>
         )}
       </div>
