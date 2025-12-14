@@ -6,20 +6,46 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
 
-type TabType = 'home' | 'search' | 'favorites' | 'categories';
+type TabType = 'home' | 'search' | 'favorites' | 'categories' | 'ingredients';
 
-const POPULAR_INGREDIENTS = [
+const ALL_INGREDIENTS = [
   { name: 'Курица', icon: '🍗', category: 'meat' },
+  { name: 'Говядина', icon: '🥩', category: 'meat' },
+  { name: 'Свинина', icon: '🥓', category: 'meat' },
+  { name: 'Рыба', icon: '🐟', category: 'meat' },
+  { name: 'Креветки', icon: '🦐', category: 'meat' },
   { name: 'Помидоры', icon: '🍅', category: 'vegetables' },
+  { name: 'Огурцы', icon: '🥒', category: 'vegetables' },
+  { name: 'Морковь', icon: '🥕', category: 'vegetables' },
   { name: 'Сыр', icon: '🧀', category: 'dairy' },
   { name: 'Яйца', icon: '🥚', category: 'dairy' },
   { name: 'Картофель', icon: '🥔', category: 'vegetables' },
+  { name: 'Картошка', icon: '🥔', category: 'vegetables' },
   { name: 'Рис', icon: '🍚', category: 'grains' },
   { name: 'Лук', icon: '🧅', category: 'vegetables' },
   { name: 'Чеснок', icon: '🧄', category: 'vegetables' },
   { name: 'Макароны', icon: '🍝', category: 'grains' },
   { name: 'Молоко', icon: '🥛', category: 'dairy' },
+  { name: 'Масло', icon: '🧈', category: 'dairy' },
+  { name: 'Перец', icon: '🌶️', category: 'vegetables' },
+  { name: 'Баклажан', icon: '🍆', category: 'vegetables' },
+  { name: 'Кабачок', icon: '🥒', category: 'vegetables' },
+  { name: 'Брокколи', icon: '🥦', category: 'vegetables' },
+  { name: 'Грибы', icon: '🍄', category: 'vegetables' },
+  { name: 'Капуста', icon: '🥬', category: 'vegetables' },
+  { name: 'Свекла', icon: '🧅', category: 'vegetables' },
+  { name: 'Тыква', icon: '🎃', category: 'vegetables' },
+  { name: 'Хлеб', icon: '🍞', category: 'grains' },
+  { name: 'Мука', icon: '🌾', category: 'grains' },
+  { name: 'Сахар', icon: '🍬', category: 'other' },
+  { name: 'Соль', icon: '🧂', category: 'other' },
+  { name: 'Лимон', icon: '🍋', category: 'fruits' },
+  { name: 'Яблоко', icon: '🍎', category: 'fruits' },
+  { name: 'Банан', icon: '🍌', category: 'fruits' },
+  { name: 'Апельсин', icon: '🍊', category: 'fruits' },
 ];
+
+const POPULAR_INGREDIENTS = ALL_INGREDIENTS.slice(0, 10);
 
 const SAMPLE_RECIPES = [
   {
@@ -62,6 +88,8 @@ export default function Index() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [shoppingList, setShoppingList] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const toggleIngredient = (ingredient: string) => {
     setSelectedIngredients((prev) =>
@@ -70,6 +98,24 @@ export default function Index() {
         : [...prev, ingredient]
     );
   };
+
+  const addIngredient = (ingredient: string) => {
+    if (!selectedIngredients.includes(ingredient)) {
+      setSelectedIngredients((prev) => [...prev, ingredient]);
+    }
+    setSearchQuery('');
+    setShowSuggestions(false);
+  };
+
+  const removeIngredient = (ingredient: string) => {
+    setSelectedIngredients((prev) => prev.filter((i) => i !== ingredient));
+  };
+
+  const filteredIngredients = ALL_INGREDIENTS.filter(
+    (ing) =>
+      ing.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      !selectedIngredients.includes(ing.name)
+  ).slice(0, 8);
 
   const toggleFavorite = (recipeId: number) => {
     setFavorites((prev) =>
@@ -141,10 +187,10 @@ export default function Index() {
               </p>
               <Button
                 className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-6 rounded-2xl shadow-lg transition-all duration-200 hover:scale-[1.02]"
-                onClick={() => setActiveTab('search')}
+                onClick={() => setActiveTab('ingredients')}
               >
-                <Icon name="Search" className="mr-2" />
-                Найти рецепты
+                <Icon name="Plus" className="mr-2" />
+                Выбрать ингредиенты
               </Button>
             </div>
           )}
@@ -378,6 +424,105 @@ export default function Index() {
     </div>
   );
 
+  const renderIngredients = () => (
+    <div className="flex flex-col min-h-screen pb-32 bg-gray-50">
+      <div className="sticky top-0 z-30 bg-gradient-to-br from-orange-500 to-pink-500 text-white px-6 pt-8 pb-6 shadow-lg">
+        <div className="flex items-center justify-between mb-4">
+          <button
+            onClick={() => setActiveTab('home')}
+            className="p-2 hover:bg-white/20 rounded-full transition-colors"
+          >
+            <Icon name="ArrowLeft" size={24} />
+          </button>
+          <h1 className="text-2xl font-bold">Выберите ингредиенты</h1>
+          <div className="w-10" />
+        </div>
+        
+        <div className="relative">
+          <Icon name="Search" className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60" size={20} />
+          <Input
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setShowSuggestions(true);
+            }}
+            onFocus={() => setShowSuggestions(true)}
+            placeholder="Например, картошка..."
+            className="pl-12 py-6 rounded-2xl border-0 bg-white/95 backdrop-blur-sm text-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-white/50"
+          />
+        </div>
+
+        {showSuggestions && searchQuery && filteredIngredients.length > 0 && (
+          <Card className="absolute left-6 right-6 mt-2 max-h-64 overflow-y-auto border-0 shadow-2xl rounded-2xl animate-scale-in">
+            {filteredIngredients.map((ingredient) => (
+              <button
+                key={ingredient.name}
+                onClick={() => addIngredient(ingredient.name)}
+                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-orange-50 transition-colors border-b last:border-b-0"
+              >
+                <span className="text-2xl">{ingredient.icon}</span>
+                <span className="text-gray-800 font-medium">{ingredient.name}</span>
+                <Icon name="Plus" size={18} className="ml-auto text-orange-500" />
+              </button>
+            ))}
+          </Card>
+        )}
+      </div>
+
+      <div className="flex-1 px-6 pt-6">
+        {selectedIngredients.length > 0 ? (
+          <div className="animate-fade-in">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              Выбрано: {selectedIngredients.length}
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {selectedIngredients.map((ingredient) => {
+                const ingredientData = ALL_INGREDIENTS.find((i) => i.name === ingredient);
+                return (
+                  <Card
+                    key={ingredient}
+                    className="flex items-center gap-3 pl-4 pr-3 py-3 border-0 shadow-lg rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white animate-scale-in hover:scale-105 transition-transform"
+                  >
+                    {ingredientData && (
+                      <span className="text-2xl">{ingredientData.icon}</span>
+                    )}
+                    <span className="font-medium">{ingredient}</span>
+                    <button
+                      onClick={() => removeIngredient(ingredient)}
+                      className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                    >
+                      <Icon name="X" size={18} />
+                    </button>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in">
+            <div className="text-6xl mb-4">🥘</div>
+            <p className="text-gray-500 mb-2">Начните вводить название продукта</p>
+            <p className="text-sm text-gray-400 px-8">
+              Используйте поиск выше, чтобы добавить ингредиенты из холодильника
+            </p>
+          </div>
+        )}
+      </div>
+
+      {selectedIngredients.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-6 shadow-2xl animate-slide-up">
+          <Button
+            className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-6 rounded-2xl shadow-lg transition-all duration-200 hover:scale-[1.02] text-lg"
+            onClick={() => setActiveTab('search')}
+          >
+            <Icon name="Search" className="mr-2" size={24} />
+            Найти рецепт ({selectedIngredients.length})
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="pb-20">
@@ -385,6 +530,7 @@ export default function Index() {
         {activeTab === 'search' && renderSearch()}
         {activeTab === 'favorites' && renderFavorites()}
         {activeTab === 'categories' && renderCategories()}
+        {activeTab === 'ingredients' && renderIngredients()}
       </main>
 
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 shadow-2xl">
