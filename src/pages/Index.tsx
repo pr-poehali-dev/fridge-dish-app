@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
 
-type TabType = 'home' | 'search' | 'favorites' | 'categories' | 'ingredients';
+type TabType = 'home' | 'search' | 'favorites' | 'categories' | 'ingredients' | 'recipe';
 
 const ALL_INGREDIENTS = [
   { name: 'Курица', icon: '🍗', category: 'meat' },
@@ -54,7 +54,22 @@ const SAMPLE_RECIPES = [
     time: '45 мин',
     difficulty: 'Легко',
     category: 'Первые блюда',
+    calories: 280,
     ingredients: ['Курица', 'Лук', 'Морковь', 'Лапша'],
+    ingredientsDetailed: [
+      { name: 'Курица', amount: '300 г' },
+      { name: 'Лук', amount: '1 шт' },
+      { name: 'Морковь', amount: '2 шт' },
+      { name: 'Лапша', amount: '100 г' },
+      { name: 'Соль', amount: 'по вкусу' },
+    ],
+    instructions: [
+      'Отварите курицу в 2 литрах воды в течение 30 минут',
+      'Нарежьте лук и морковь небольшими кубиками',
+      'Добавьте овощи в бульон и варите 10 минут',
+      'Добавьте лапшу и варите ещё 5 минут',
+      'Посолите по вкусу и подавайте горячим',
+    ],
     image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400',
   },
   {
@@ -63,7 +78,22 @@ const SAMPLE_RECIPES = [
     time: '25 мин',
     difficulty: 'Средне',
     category: 'Вторые блюда',
+    calories: 520,
     ingredients: ['Макароны', 'Яйца', 'Сыр', 'Бекон'],
+    ingredientsDetailed: [
+      { name: 'Макароны', amount: '200 г' },
+      { name: 'Яйца', amount: '3 шт' },
+      { name: 'Сыр Пармезан', amount: '100 г' },
+      { name: 'Бекон', amount: '150 г' },
+      { name: 'Чёрный перец', amount: 'по вкусу' },
+    ],
+    instructions: [
+      'Отварите макароны в подсоленной воде до готовности',
+      'Обжарьте бекон на сковороде до золотистой корочки',
+      'Взбейте яйца с тёртым сыром в миске',
+      'Смешайте горячие макароны с яйцами и беконом',
+      'Поперчите и подавайте немедленно',
+    ],
     image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400',
   },
   {
@@ -211,6 +241,7 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Все блюда');
+  const [currentRecipe, setCurrentRecipe] = useState<number | null>(null);
 
   const toggleIngredient = (ingredient: string) => {
     setSelectedIngredients((prev) =>
@@ -466,6 +497,10 @@ export default function Index() {
                 <Button
                   className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold rounded-xl"
                   size="sm"
+                  onClick={() => {
+                    setCurrentRecipe(recipe.id);
+                    setActiveTab('recipe');
+                  }}
                 >
                   Посмотреть рецепт
                   <Icon name="ArrowRight" size={16} className="ml-2" />
@@ -602,6 +637,128 @@ export default function Index() {
     </div>
   );
 
+  const renderRecipe = () => {
+    const recipe = SAMPLE_RECIPES.find((r) => r.id === currentRecipe);
+    if (!recipe) return null;
+
+    return (
+      <div className="flex flex-col min-h-screen pb-32 bg-gray-50">
+        <div className="sticky top-0 z-30 bg-white px-6 pt-6 pb-4 shadow-md">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setActiveTab('search')}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <Icon name="ArrowLeft" size={24} className="text-gray-800" />
+            </button>
+            <h1 className="text-xl font-bold text-gray-800 flex-1 text-center mr-10">
+              {recipe.title}
+            </h1>
+          </div>
+        </div>
+
+        <div className="relative w-full h-64 mb-6">
+          <img
+            src={recipe.image}
+            alt={recipe.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+        </div>
+
+        <div className="px-6 -mt-10 relative z-20">
+          <div className="flex gap-3 mb-6">
+            <Card className="flex-1 p-4 border-0 shadow-lg rounded-2xl bg-white text-center">
+              <Icon name="Clock" size={24} className="text-orange-500 mx-auto mb-2" />
+              <p className="text-xs text-gray-600 mb-1">Время</p>
+              <p className="font-bold text-gray-800">{recipe.time}</p>
+            </Card>
+            <Card className="flex-1 p-4 border-0 shadow-lg rounded-2xl bg-white text-center">
+              <Icon name="Star" size={24} className="text-orange-500 mx-auto mb-2" />
+              <p className="text-xs text-gray-600 mb-1">Сложность</p>
+              <p className="font-bold text-gray-800">{recipe.difficulty}</p>
+            </Card>
+            <Card className="flex-1 p-4 border-0 shadow-lg rounded-2xl bg-white text-center">
+              <Icon name="Flame" size={24} className="text-orange-500 mx-auto mb-2" />
+              <p className="text-xs text-gray-600 mb-1">Калории</p>
+              <p className="font-bold text-gray-800">{recipe.calories}</p>
+            </Card>
+          </div>
+
+          <Card className="p-6 border-0 shadow-lg rounded-3xl bg-white mb-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <Icon name="ShoppingBasket" size={24} className="text-orange-500" />
+              Ингредиенты
+            </h2>
+            <div className="space-y-3">
+              {recipe.ingredientsDetailed?.map((ingredient, index) => {
+                const hasIngredient = selectedIngredients.some((ing) =>
+                  ingredient.name.toLowerCase().includes(ing.toLowerCase())
+                );
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between py-3 border-b last:border-b-0"
+                  >
+                    <div className="flex items-center gap-3 flex-1">
+                      {hasIngredient ? (
+                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
+                          <Icon name="Check" size={16} className="text-green-600" />
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-yellow-100">
+                          <Icon name="AlertCircle" size={16} className="text-yellow-600" />
+                        </div>
+                      )}
+                      <span className="text-gray-800 font-medium">{ingredient.name}</span>
+                    </div>
+                    <span className="text-gray-600 text-sm">{ingredient.amount}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+
+          <Card className="p-6 border-0 shadow-lg rounded-3xl bg-white mb-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <Icon name="BookOpen" size={24} className="text-orange-500" />
+              Инструкция
+            </h2>
+            <div className="space-y-4">
+              {recipe.instructions?.map((step, index) => (
+                <div key={index} className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white flex items-center justify-center font-bold text-sm">
+                    {index + 1}
+                  </div>
+                  <p className="text-gray-700 leading-relaxed pt-1">{step}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-6 shadow-2xl">
+          <Button
+            className={cn(
+              'w-full font-bold py-6 rounded-2xl shadow-lg transition-all duration-200 text-lg',
+              favorites.includes(recipe.id)
+                ? 'bg-gray-200 text-gray-600'
+                : 'bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white hover:scale-[1.02]'
+            )}
+            onClick={() => toggleFavorite(recipe.id)}
+          >
+            <Icon
+              name="Heart"
+              size={24}
+              className={cn('mr-2', favorites.includes(recipe.id) && 'fill-current')}
+            />
+            {favorites.includes(recipe.id) ? 'Удалить из избранного' : 'Сохранить в мои рецепты'}
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   const renderIngredients = () => (
     <div className="flex flex-col min-h-screen pb-32 bg-gray-50">
       <div className="sticky top-0 z-30 bg-gradient-to-br from-orange-500 to-pink-500 text-white px-6 pt-8 pb-6 shadow-lg">
@@ -709,6 +866,7 @@ export default function Index() {
         {activeTab === 'favorites' && renderFavorites()}
         {activeTab === 'categories' && renderCategories()}
         {activeTab === 'ingredients' && renderIngredients()}
+        {activeTab === 'recipe' && renderRecipe()}
       </main>
 
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 shadow-2xl">
