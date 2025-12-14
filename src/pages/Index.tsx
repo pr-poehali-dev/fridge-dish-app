@@ -53,6 +53,7 @@ const SAMPLE_RECIPES = [
     title: 'Куриный суп с лапшой',
     time: '45 мин',
     difficulty: 'Легко',
+    category: 'Первые блюда',
     ingredients: ['Курица', 'Лук', 'Морковь', 'Лапша'],
     image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400',
   },
@@ -61,6 +62,7 @@ const SAMPLE_RECIPES = [
     title: 'Паста Карбонара',
     time: '25 мин',
     difficulty: 'Средне',
+    category: 'Вторые блюда',
     ingredients: ['Макароны', 'Яйца', 'Сыр', 'Бекон'],
     image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400',
   },
@@ -69,9 +71,127 @@ const SAMPLE_RECIPES = [
     title: 'Греческий салат',
     time: '15 мин',
     difficulty: 'Легко',
+    category: 'Салаты',
     ingredients: ['Помидоры', 'Огурцы', 'Сыр Фета', 'Оливки'],
     image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400',
   },
+  {
+    id: 4,
+    title: 'Жареная курица с картошкой',
+    time: '60 мин',
+    difficulty: 'Средне',
+    category: 'Вторые блюда',
+    ingredients: ['Курица', 'Картофель', 'Чеснок', 'Масло'],
+    image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400',
+  },
+  {
+    id: 5,
+    title: 'Омлет с помидорами',
+    time: '15 мин',
+    difficulty: 'Легко',
+    category: 'Завтраки',
+    ingredients: ['Яйца', 'Помидоры', 'Сыр', 'Молоко'],
+    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400',
+  },
+  {
+    id: 6,
+    title: 'Грибной крем-суп',
+    time: '35 мин',
+    difficulty: 'Средне',
+    category: 'Первые блюда',
+    ingredients: ['Грибы', 'Лук', 'Молоко', 'Масло'],
+    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400',
+  },
+  {
+    id: 7,
+    title: 'Бутерброд с сыром и помидором',
+    time: '5 мин',
+    difficulty: 'Легко',
+    category: 'Бутерброды',
+    ingredients: ['Хлеб', 'Сыр', 'Помидоры', 'Масло'],
+    image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400',
+  },
+  {
+    id: 8,
+    title: 'Овощное рагу',
+    time: '40 мин',
+    difficulty: 'Легко',
+    category: 'Вторые блюда',
+    ingredients: ['Картофель', 'Морковь', 'Лук', 'Помидоры'],
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400',
+  },
+  {
+    id: 9,
+    title: 'Яичница с беконом',
+    time: '10 мин',
+    difficulty: 'Легко',
+    category: 'Завтраки',
+    ingredients: ['Яйца', 'Бекон', 'Масло'],
+    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400',
+  },
+  {
+    id: 10,
+    title: 'Цезарь с курицей',
+    time: '20 мин',
+    difficulty: 'Средне',
+    category: 'Салаты',
+    ingredients: ['Курица', 'Салат', 'Сыр', 'Хлеб'],
+    image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400',
+  },
+  {
+    id: 11,
+    title: 'Куриный бульон',
+    time: '90 мин',
+    difficulty: 'Легко',
+    category: 'Первые блюда',
+    ingredients: ['Курица', 'Лук', 'Морковь', 'Соль'],
+    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400',
+  },
+  {
+    id: 12,
+    title: 'Картофельное пюре',
+    time: '30 мин',
+    difficulty: 'Легко',
+    category: 'Вторые блюда',
+    ingredients: ['Картофель', 'Молоко', 'Масло', 'Соль'],
+    image: 'https://images.unsplash.com/photo-1587080266227-677cc2a4e76e?w=400',
+  },
+  {
+    id: 13,
+    title: 'Тост с авокадо и яйцом',
+    time: '10 мин',
+    difficulty: 'Легко',
+    category: 'Завтраки',
+    ingredients: ['Хлеб', 'Яйца', 'Авокадо'],
+    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400',
+  },
+  {
+    id: 14,
+    title: 'Клаб-сэндвич',
+    time: '15 мин',
+    difficulty: 'Средне',
+    category: 'Бутерброды',
+    ingredients: ['Хлеб', 'Курица', 'Помидоры', 'Салат'],
+    image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400',
+  },
+  {
+    id: 15,
+    title: 'Винегрет',
+    time: '25 мин',
+    difficulty: 'Легко',
+    category: 'Салаты',
+    ingredients: ['Свекла', 'Картофель', 'Морковь', 'Огурцы'],
+    image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400',
+  },
+];
+
+const RECIPE_CATEGORIES = [
+  'Все блюда',
+  'Вторые блюда',
+  'Первые блюда',
+  'Завтраки',
+  'Салаты',
+  'Бутерброды',
 ];
 
 const CATEGORIES = [
@@ -90,6 +210,7 @@ export default function Index() {
   const [shoppingList, setShoppingList] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('Все блюда');
 
   const toggleIngredient = (ingredient: string) => {
     setSelectedIngredients((prev) =>
@@ -116,6 +237,16 @@ export default function Index() {
       ing.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
       !selectedIngredients.includes(ing.name)
   ).slice(0, 8);
+
+  const filteredRecipes = SAMPLE_RECIPES.filter((recipe) => {
+    const matchesCategory = selectedCategory === 'Все блюда' || recipe.category === selectedCategory;
+    return matchesCategory;
+  });
+
+  const getCategoryCount = (category: string) => {
+    if (category === 'Все блюда') return SAMPLE_RECIPES.length;
+    return SAMPLE_RECIPES.filter((r) => r.category === category).length;
+  };
 
   const toggleFavorite = (recipeId: number) => {
     setFavorites((prev) =>
@@ -209,41 +340,52 @@ export default function Index() {
   );
 
   const renderSearch = () => (
-    <div className="flex flex-col min-h-screen pb-24 px-6 pt-6">
-      <div className="mb-6 animate-fade-in">
-        <h1 className="text-2xl font-bold mb-4 text-gray-800">Поиск рецептов</h1>
-        <div className="relative">
-          <Icon name="Search" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-          <Input
-            placeholder="Найти рецепт..."
-            className="pl-12 py-6 rounded-2xl border-2 border-gray-200 focus:border-orange-500"
-          />
+    <div className="flex flex-col min-h-screen pb-24 bg-gray-50">
+      <div className="sticky top-0 z-30 bg-white px-6 pt-6 pb-4 shadow-sm">
+        <div className="mb-4 animate-fade-in">
+          <h1 className="text-2xl font-bold text-gray-800 mb-1">
+            Найдено {filteredRecipes.length} рецептов
+          </h1>
         </div>
-      </div>
 
-      {selectedIngredients.length > 0 && (
-        <div className="mb-6 animate-slide-up">
-          <p className="text-sm text-gray-600 mb-2">
-            Рецепты с вашими ингредиентами ({selectedIngredients.length})
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {selectedIngredients.map((ingredient) => (
-              <Badge key={ingredient} className="bg-orange-100 text-orange-700 px-3 py-1">
-                {ingredient}
-                <button
-                  onClick={() => toggleIngredient(ingredient)}
-                  className="ml-2 hover:text-orange-900"
-                >
-                  ×
-                </button>
-              </Badge>
+        {selectedIngredients.length > 0 && (
+          <div className="mb-4 animate-slide-up">
+            <p className="text-sm font-semibold text-gray-700 mb-2">
+              С вашими продуктами:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {selectedIngredients.map((ingredient) => (
+                <Badge key={ingredient} className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-3 py-1.5 text-xs">
+                  {ingredient}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="mb-4">
+          <p className="text-sm font-semibold text-gray-700 mb-3">Выберите категорию блюд</p>
+          <div className="flex gap-2 overflow-x-auto pb-2 -mx-6 px-6 scrollbar-hide">
+            {RECIPE_CATEGORIES.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={cn(
+                  'flex-shrink-0 px-4 py-2.5 rounded-2xl font-medium text-sm transition-all duration-200 whitespace-nowrap',
+                  selectedCategory === category
+                    ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg scale-105'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                )}
+              >
+                {category} ({getCategoryCount(category)})
+              </button>
             ))}
           </div>
         </div>
-      )}
+      </div>
 
-      <div className="space-y-4">
-        {SAMPLE_RECIPES.map((recipe, index) => (
+      <div className="px-6 pt-4 space-y-4">
+        {filteredRecipes.map((recipe, index) => (
           <Card
             key={recipe.id}
             className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] animate-slide-up rounded-3xl"
