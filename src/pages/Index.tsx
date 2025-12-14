@@ -153,7 +153,99 @@ export default function Index() {
 
       <div className="px-6 -mt-20 relative z-20 animate-slide-up">
         <Card className="bg-white shadow-xl p-6 rounded-3xl border-0">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">Популярные ингредиенты</h3>
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">Что есть в холодильнике?</h3>
+          
+          <div className="relative mb-6">
+            <Icon name="Search" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <Input
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSuggestions(e.target.value.length > 0);
+              }}
+              onFocus={() => setShowSuggestions(searchQuery.length > 0)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && searchQuery.trim()) {
+                  addIngredient(searchQuery.trim());
+                  e.preventDefault();
+                }
+              }}
+              placeholder="Напишите: карт..., морк..., лук..."
+              className="pl-12 pr-12 py-6 rounded-2xl border-2 border-gray-200 focus:border-orange-400 text-gray-800 placeholder:text-gray-400 text-base"
+            />
+            {searchQuery.trim() && (
+              <button
+                onClick={() => addIngredient(searchQuery.trim())}
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 rounded-full p-2.5 transition-all shadow-md hover:scale-105"
+              >
+                <Icon name="Plus" size={20} />
+              </button>
+            )}
+            
+            {showSuggestions && searchQuery.length > 0 && filteredIngredients.length > 0 && (
+              <Card className="absolute left-0 right-0 top-full mt-2 max-h-64 overflow-y-auto border-0 shadow-2xl rounded-2xl animate-scale-in z-50">
+                {filteredIngredients.slice(0, 5).map((ingredient) => (
+                  <button
+                    key={ingredient.name}
+                    onClick={() => addIngredient(ingredient.name)}
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-orange-50 hover:to-pink-50 transition-all border-b last:border-b-0 first:rounded-t-2xl last:rounded-b-2xl"
+                  >
+                    <span className="text-2xl">{ingredient.icon}</span>
+                    <span className="text-gray-900 font-medium text-base flex-1 text-left">{ingredient.name}</span>
+                    <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full p-1.5">
+                      <Icon name="Plus" size={16} />
+                    </div>
+                  </button>
+                ))}
+              </Card>
+            )}
+            
+            {showSuggestions && searchQuery.length > 0 && filteredIngredients.length === 0 && (
+              <Card className="absolute left-0 right-0 top-full mt-2 border-0 shadow-2xl rounded-2xl animate-scale-in z-50">
+                <button
+                  onClick={() => addIngredient(searchQuery.trim())}
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-orange-50 hover:to-pink-50 transition-all rounded-2xl"
+                >
+                  <span className="text-2xl">➕</span>
+                  <div className="flex-1 text-left">
+                    <span className="text-gray-900 font-medium text-base">Добавить "{searchQuery}"</span>
+                    <p className="text-xs text-gray-500">Свой продукт</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full p-1.5">
+                    <Icon name="Plus" size={16} />
+                  </div>
+                </button>
+              </Card>
+            )}
+          </div>
+          
+          {selectedIngredients.length > 0 && (
+            <div className="mb-4">
+              <p className="text-sm font-semibold text-gray-700 mb-2">Выбрано: {selectedIngredients.length}</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {selectedIngredients.map((ingredient) => {
+                  const ingredientData = ALL_INGREDIENTS.find((i) => i.name === ingredient);
+                  return (
+                    <div
+                      key={ingredient}
+                      className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-md animate-scale-in"
+                    >
+                      {ingredientData && <span className="text-base">{ingredientData.icon}</span>}
+                      <span>{ingredient}</span>
+                      <button
+                        onClick={() => removeIngredient(ingredient)}
+                        className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                      >
+                        <Icon name="X" size={14} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          
+          <h4 className="text-sm font-semibold text-gray-600 mb-3">Популярные продукты</h4>
           <div className="flex flex-wrap gap-2 mb-6">
             {POPULAR_INGREDIENTS.map((ingredient) => (
               <Badge
@@ -172,20 +264,14 @@ export default function Index() {
               </Badge>
             ))}
           </div>
-          
           {selectedIngredients.length > 0 && (
-            <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">
-                Выбрано: {selectedIngredients.length} ингредиентов
-              </p>
-              <Button
-                className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-6 rounded-2xl shadow-lg transition-all duration-200 hover:scale-[1.02]"
-                onClick={() => setActiveTab('ingredients')}
-              >
-                <Icon name="Plus" className="mr-2" />
-                Выбрать ингредиенты
-              </Button>
-            </div>
+            <Button
+              className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-6 rounded-2xl shadow-lg transition-all duration-200 hover:scale-[1.02] mb-3"
+              onClick={() => setActiveTab('search')}
+            >
+              <Icon name="ChefHat" className="mr-2" size={24} />
+              Подобрать рецепты
+            </Button>
           )}
           
           <Button
