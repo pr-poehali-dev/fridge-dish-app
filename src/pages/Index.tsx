@@ -652,6 +652,18 @@ export default function Index() {
               ))}
             </div>
           </Card>
+          
+          {recipe.chefTip && (
+            <Card className="p-6 border-0 shadow-lg rounded-3xl bg-gradient-to-br from-orange-50 to-pink-50 mb-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Icon name="ChefHat" size={24} className="text-orange-500" />
+                Совет от шефа
+              </h2>
+              <p className="text-gray-700 leading-relaxed italic">
+                {recipe.chefTip}
+              </p>
+            </Card>
+          )}
         </div>
 
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-6 shadow-2xl">
